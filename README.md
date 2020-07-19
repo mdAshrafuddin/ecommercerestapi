@@ -35,11 +35,24 @@ Ecommerce-rest-api is an authenticated rest api which supports CRUD operation of
 2. An Admin can create, read, update and delete all products.
 3. Requests are authenticated on the basis of tokens.
 4. Tokens have a life of one hour.
+5. User associated address one to many can create, read, view, update, and delete his own and all.  
 
 # Schema Design
 https://docs.google.com/document/d/1JIxKaWqGI-_psXmHjmsMBkagEn2Tu0ZHQ6Pf1W3uf5o/edit# 
 
 # Usage
+
+Users: 
+
+http://localhost:8765/users/login.json
+
+{
+    "message": "CSRF token from either the request body or request headers did not match or is missing.",
+    "url": "/users/login.json",
+    "code": 403,
+    "file": "C:\\xampp\\htdocs\\cakephp\\ecommercerestapi\\vendor\\cakephp\\cakephp\\src\\Http\\Middleware\\CsrfProtectionMiddleware.php",
+    "line": 302
+}
 
 Get request / users to get all users
 http://localhost:8765/users.json
@@ -71,4 +84,60 @@ Response:
     ]
 }
 
+Get Request / users to get single users.
+http://localhost:8765/users/view/1.json
+
+Response:
+
+{
+    "user": {
+        "id": 1,
+        "name": "Admin",
+        "email": "mdashrafudding@gmail.com",
+        "date_of_birth": "2020-07-15T11:07:45+00:00",
+        "phone": "0175351119",
+        "status": 1,
+        "created": "2020-07-15T05:17:58+00:00",
+        "modified": "2020-07-15T05:17:58+00:00"
+    }
+}
+
+POST Request / users to create a new users.
+http://localhost:8765/users/add.json
+
+Response:
+
+{
+    "message": "CSRF token from either the request body or request headers did not match or is missing.",
+    "url": "/users/add.json",
+    "code": 403,
+    "file": "C:\\xampp\\htdocs\\cakephp\\ecommercerestapi\\vendor\\cakephp\\cakephp\\src\\Http\\Middleware\\CsrfProtectionMiddleware.php",
+    "line": 302
+}
+
+PUT Request / users to update specific users.
+http://localhost:8765/users/edit/1.json
+
+Response:
+
+{
+    "message": "CSRF token from either the request body or request headers did not match or is missing.",
+    "url": "/users/add.json",
+    "code": 403,
+    "file": "C:\\xampp\\htdocs\\cakephp\\ecommercerestapi\\vendor\\cakephp\\cakephp\\src\\Http\\Middleware\\CsrfProtectionMiddleware.php",
+    "line": 302
+}
+
+DELETE Request / users to Delete specific users.
+http://localhost:8765/users/1.json
+
+Response:
+
+{
+    "message": "CSRF token from either the request body or request headers did not match or is missing.",
+    "url": "/users/add.json",
+    "code": 403,
+    "file": "C:\\xampp\\htdocs\\cakephp\\ecommercerestapi\\vendor\\cakephp\\cakephp\\src\\Http\\Middleware\\CsrfProtectionMiddleware.php",
+    "line": 302
+}
 
