@@ -62,8 +62,8 @@ class TagsController extends AppController
             
         }
         $product = $this->Tags->Product->find('list', ['limit' => 200]);
-        $this->set(compact('tag', 'product'));
-        $this->viewBuilder()->setOption('serialize', ['tag', 'product']);
+        $this->set(compact('tag', 'product', 'message'));
+        $this->viewBuilder()->setOption('serialize', ['tag', 'product'. 'message']);
     }
 
     /**
@@ -109,6 +109,6 @@ class TagsController extends AppController
             $message = "Error";
         } 
 
-        return $this->redirect(['action' => 'index']);
+        $this->viewBuilder()->setOption('serialize', ['tag', 'message']);
     }
 }

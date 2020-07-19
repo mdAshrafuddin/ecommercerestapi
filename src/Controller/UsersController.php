@@ -11,6 +11,21 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
+
+    //Login method 
+    public function login()
+    {
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            } else {
+                $this->Flash->error(__('Username or password is incorrect'));
+            }
+        }
+    }
+
     /**
      * Index method
      *
@@ -97,7 +112,7 @@ class UsersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         $message = "Saved";
-        if ($this->Users->delete($user)) {
+        if (!$this->Users->delete($user)) {
             $message = "Error";
         }
 

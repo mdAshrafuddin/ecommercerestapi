@@ -11,98 +11,70 @@ namespace App\Controller;
  */
 class CategoriesController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Csrf');
+    }
+
     public function index()
     {
-        $categories = $this->paginate($this->Categories);
-
-        $this->set(compact('categories'));
+        $categories = $this->Categories->find('all');
+        $this->set('categories', $categories);
         $this->viewBuilder()->setOption('serialize', ['categories']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Category id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
+    public function view($id)
     {
-        $category = $this->Categories->get($id, [
-            'contain' => ['Product'],
-        ]);
-
-        $this->set(compact('category'));
-        $this->viewBuilder()->setOption('serialize', ['category']);
+        $recipe = $this->Categories->get($id);
+        $this->set('recipe', $recipe);
+        $this->viewBuilder()->setOption('serialize', ['recipe']);
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
-        $category = $this->Categories->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $category = $this->Categories->patchEntity($category, $this->request->getData());
-            if ($this->Categories->save($category)) {
-               $message = "Saved";
-            } else {
-                $message = "Error";
-            }
-            $this->Flash->error(__('The category could not be saved. Please, try again.'));
+        $this->request->allowMethod(['post', 'put']);
+        $recipe = $this->Categories->newEntity($this->request->getData());
+        if ($this->Categories->save($recipe)) {
+            $message = 'Saved';
+        } else {
+            $message = 'Error';
         }
-        $this->set(compact('category'));
-        $this->viewBuilder()->setOption('serialize', ['category', 'message']);
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Category id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $category = $this->Categories->get($id, [
-            'contain' => [],
+        $this->set([
+            'message' => $message,
+            'recipe' => $recipe,
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $category = $this->Categories->patchEntity($category, $this->request->getData());
-            if ($this->Categories->save($category)) {
-                $message = "Saved";
-            } else {
-                $message = "Error";
-            }
-            $this->Flash->error(__('The category could not be saved. Please, try again.'));
-        }
-        $this->set(compact('category'));
-        $this->viewBuilder()->setOption('serialize', ['category', 'message']);
+        
+        $this->viewBuilder()->setOption('serialize', ['recipe', 'message']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Category id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
+    public function edit($id)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $category = $this->Categories->get($id);
-        $message = "Saved";
-        if (!$this->Categories->delete($category)) {
-            $message = "Error";
-        } 
+        $this->request->allowMethod(['patch', 'post', 'put']);
+        $recipe = $this->Categories->get($id);
+        $recipe = $this->Categories->patchEntity($recipe, $this->request->getData());
+        if ($this->Recipes->save($recipe)) {
+            $message = 'Saved';
+        } else {
+            $message = 'Error';
+        }
+        $this->set([
+            'message' => $message,
+            'recipe' => $recipe,
+        ]);
+        $this->viewBuilder()->setOption('serialize', ['recipe', 'message']);
+    }
 
-        $this->viewBuilder()->setOption('serialize', ['category', 'message']);
+    public function delete($id)
+    {
+        $this->request->allowMethod(['delete']);
+        $recipe = $this->Categories->get($id);
+        $message = 'Deleted';
+        if (!$this->Categories->delete($recipe)) {
+            $message = 'Error';
+        }
+        $this->set('message', $message);
+        $this->viewBuilder()->setOption('serialize', ['message']);
     }
 }
